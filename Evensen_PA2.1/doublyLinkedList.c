@@ -75,9 +75,9 @@ int insertFront(Node** songList, Record* pSong)
 	return success;
 }
 
-// Print the contents of a list recursively
-// Takes a Node to start from; cannot be NULL
-void printList(Node* sListEntry)
+// Print the contents of a Node
+// Takes a Node; cannot be NULL
+void printNode(Node* sListEntry)
 {
 	printf("Title:  %s\n", sListEntry->songData.sonTitle);
 	printf("Album:  %s\n", sListEntry->songData.albTitle);
@@ -89,6 +89,13 @@ void printList(Node* sListEntry)
 	printf("Played: %d\n", sListEntry->songData.timesPlayed);
 	// Add a divider
 	puts("--------------");
+}
+
+// Print the contents of a list recursively
+// Takes a Node to start from; cannot be NULL
+void printList(Node* sListEntry)
+{
+	printNode(sListEntry);
 
 	// If we have not reached the end of the list, continue on
 	if (sListEntry->pNext != NULL)
@@ -187,4 +194,62 @@ int savePlayList(Node* playList, FILE* location)
 	}
 
 	return count;
+}
+
+// Grab the address of a node from the heap based on an artist
+// Takes a pointer to a list and a search string; Neither the list nor the string may be NULL
+// Returns the address of a node in the heap
+Node* searchList(Node* playList, char* searchString)
+{
+	// Number of nodes found
+	int nFound = 0;
+	// User input
+	int intSelect = 0;
+
+	// Traversal pointer
+	Node* pCur = playList;
+
+	puts("Please Select Desired Song:");
+
+	// Search through the list for matching nodes
+	while (pCur != NULL)
+	{
+		if (strcmp(searchString, pCur->songData.artist) == 0)
+		{
+			nFound++;
+			printf("%d) %s\n", nFound, pCur->songData.sonTitle);
+		}
+
+		// Traverse the list
+		pCur = pCur->pNext;
+	}
+
+	// Obtain user input if matches found
+	if (nFound > 0)
+	{
+		intInput(&intSelect);
+
+		// Fetch requested node
+		pCur = playList;
+		for (int i = 0; i <= intSelect;)
+		{
+			// Check for invalid input
+			if (pCur == NULL)
+				return pCur;
+
+			if (strcmp(searchString, pCur->songData.artist) == 0)
+			{
+				// Break the loop if we found our Node
+				i++;
+				if (i == intSelect)
+					return pCur;
+			}
+
+			// Traverse the List
+			pCur = pCur->pNext;
+		}
+	}
+
+	// If a valid node was not found, return a NULL pointer
+	return NULL;
 }

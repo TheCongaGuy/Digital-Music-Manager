@@ -3,7 +3,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <stdio.h> // puts(), printf(), fprintf(), fopen(), fclose(), fgets(), gets()
+#include <stdio.h> // puts(), printf(), fprintf(), fopen(), fclose(), fgets(), gets(), scanf()
 #include <stdlib.h> // atoi(), malloc()
 #include <string.h> // strcpy(), strcmp()
 
@@ -50,16 +50,20 @@ typedef struct node
 // Takes a pointer to an int variable; changing the value upon sucessful conversion
 void intInput(int* var);
 
+// Print the contents of a Node
+// Takes a Node; cannot be NULL
+void printNode(Node* sListEntry);
+
 // Print the contents of a list recursively
-// Takes a Node to start from
+// Takes a Node to start from; cannot be NULL
 void printList(Node* sListEntry);
 
 // Print the filtered contents of a list recursively
-// Takes a name to search for and a Node to start from
+// Takes a name to search for and a Node to start from; Neither can be NULL
 void printFilteredList(char* target, Node* sListEntry);
 
 // Converts a string of data to a Record and adds it to the given list
-// Take a pointer to the play list and a char pointer to a formatted string
+// Takes a pointer to the play list and a char pointer to a formatted string
 // Return an int of success; 0 = failure, 1 = success
 int loadSong(Node** playList, char* dataLine);
 
@@ -67,5 +71,10 @@ int loadSong(Node** playList, char* dataLine);
 // Takes a pointer to a list and a file to print to; Neither the list nor the file may be NULL
 // Returns number of songs saved
 int savePlayList(Node* playList, FILE* location);
+
+// Grab the address of a node from the heap based on an artist
+// Takes a pointer to a list and a search string; Neither the list nor the string may be NULL
+// Returns the address of a node in the heap
+Node* searchList(Node* playList, char* searchString);
 
 #endif // Guard Code end
