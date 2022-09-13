@@ -15,7 +15,7 @@
 void intInput(int* pVar)
 {
 	char input[50] = "";
-	if (scanf("%s", input) != EOF)
+	if (scanf(" %[^\n]s", input) != EOF)
 		*pVar = atoi(input);
 }
 
@@ -103,22 +103,11 @@ void printList(Node* sListEntry)
 }
 
 // Print the filtered contents of a list recursively
-// Takes a name to search for and a Node to start from
+// Takes a name to search for and a Node to start from; Neither may be NULL
 void printFilteredList(char* target, Node* sListEntry)
 {
 	if (strcmp(target, sListEntry->songData.artist) == 0)
-	{
-		printf("Title:  %s\n", sListEntry->songData.sonTitle);
-		printf("Album:  %s\n", sListEntry->songData.albTitle);
-		printf("Artist: %s\n", sListEntry->songData.artist);
-		printf("Genre:  %s\n", sListEntry->songData.genre);
-
-		printf("%d:%d\n", sListEntry->songData.length.minutes, sListEntry->songData.length.seconds);
-		printf("%d/5 Stars\n", sListEntry->songData.rating);
-		printf("Played: %d\n", sListEntry->songData.timesPlayed);
-		// Add a divider
-		puts("--------------");
-	}
+		printNode(sListEntry);
 
 	// If we have not reached the end of the list, continue on
 	if (sListEntry->pNext != NULL)

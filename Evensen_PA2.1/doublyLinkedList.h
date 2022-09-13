@@ -6,6 +6,7 @@
 #include <stdio.h> // puts(), printf(), fprintf(), fopen(), fclose(), fgets(), gets(), scanf()
 #include <stdlib.h> // atoi(), malloc()
 #include <string.h> // strcpy(), strcmp()
+#include <Windows.h> // Sleep()
 
 /*******************************************************************************
  * Programmer: Drew Evensen		                                               *
