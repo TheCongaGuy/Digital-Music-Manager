@@ -16,7 +16,6 @@
  // File Manager
  // Print List method
  // Search List method
- // Edit method
 
 int main(int argc, char argv[])
 {
@@ -124,34 +123,228 @@ int main(int argc, char argv[])
 						scanf(" %[^\n]s", &strSelect);
 						printFilteredList(strSelect, pHead);
 					}
-
 					// Did not select 1 or 2
 					else
 						puts("Unknown Command");
 				}
 				else
-					puts("List is empty");
+					puts("No Songs Loaded");
 
 				break;
 			}
 
-			// Edit list
+			// Edit list (Complete)
 			case 6:
 			{
+				// Requested Node
+				Node* reqNode = NULL;
+
 				// Obtain the name of the artist
 				printf("Name of the Artist (Last name, First name): ");
 				scanf(" %[^\n]s", strSelect);
 
 				// Grab the Node from the heap
+				reqNode = searchList(pHead, strSelect);
+
+				// Check to see if Node was obtained
+				if (reqNode != NULL)
+				{
+					// Reset selection
+					intSelect = 0;
+
+					// Edit until user quits
+					while (intSelect != 8)
+					{
+						// Refresh the screen after every edit
+						system("cls");
+
+						printNode(reqNode);
+						puts("What would you like to change?");
+						puts("1) Song Title\n2) Album Title\n3) Artist\n4) Genre\n5) Duration\n6) Rating\n7) Play Count\n8) Finish");
+
+						// Get input from the user
+						intInput(&intSelect);
+
+						// Change the field chosen by the user
+						switch (intSelect)
+						{
+							// Song Title
+							case 1:
+							{
+								// Obtain the new title
+								puts("New Song Title:");
+								scanf(" %[^\n]s", strSelect);
+
+								// Assign the new title
+								strcpy(reqNode->songData.sonTitle, strSelect);
+								break;
+							}
+							// Album Title
+							case 2:
+							{
+								// Obtain the new title
+								puts("New Album Title:");
+								scanf(" %[^\n]s", strSelect);
+
+								// Assign the new title
+								strcpy(reqNode->songData.albTitle, strSelect);
+								break;
+							}
+							// Artist
+							case 3:
+							{
+								// Obtain the new artist
+								puts("New Artist:");
+								scanf(" %[^\n]s", strSelect);
+
+								// Assign the new artist
+								strcpy(reqNode->songData.artist, strSelect);
+								break;
+							}
+							// Genre
+							case 4:
+							{
+								// Obtain the new genre
+								puts("New Genre:");
+								scanf(" %[^\n]s", strSelect);
+
+								// Assign the new genre
+								strcpy(reqNode->songData.genre, strSelect);
+								break;
+							}
+							// Duration
+							case 5:
+							{
+								// Obtain and assign new minute and second values
+								puts("Minute Value:");
+								intInput(&intSelect);
+								reqNode->songData.length.minutes = intSelect;
+
+								puts("Second Value:");
+								scanf(" %[^\n]s", strSelect);
+								reqNode->songData.length.seconds = atoi(strSelect);
+								break;
+							}
+							// Rating
+							case 6:
+							{
+								// Obtain and assign new rating
+								puts("New Rating /5:");
+								intInput(&intSelect);
+
+								// Clamp values between 1 and 5 inclusively
+								if (intSelect < 1)
+									intSelect = 1;
+								if (intSelect > 5)
+									intSelect = 5;
+
+								reqNode->songData.rating = intSelect;
+								break;
+							}
+							// Play Count
+							case 7:
+							{
+								// Obtain and assign new play count value
+								puts("Times Played:");
+								intInput(&intSelect);
+								reqNode->songData.timesPlayed = intSelect;
+								break;
+							}
+						} // End of switch()
+					} // End of while()
+				}// End of if()
+				else
+					puts("Could Not Find Song");
+
+				break;
+			}
+
+			// Rate (Complete)
+			case 8:
+			{
+				// Requested Node
+				Node* reqNode = NULL;
+
+				// Obtain the name of the artist
+				printf("Name of the Artist (Last name, First name): ");
+				scanf(" %[^\n]s", strSelect);
+
+				// Grab the Node from the heap
+				reqNode = searchList(pHead, strSelect);
+
+				// Check to see if node was obtained
+				if (reqNode != NULL)
+				{
+					// Print the Node
+					printNode(reqNode);
+
+					// Obtain new rating from the user
+					puts("New Rating /5:");
+					intInput(&intSelect);
+
+					// Clamp values between 1 and 5 inclusively
+					if (intSelect < 1)
+						intSelect = 1;
+					if (intSelect > 5)
+						intSelect = 5;
+
+					reqNode->songData.rating = intSelect;
+				}
+				else
+					puts("Could Not Find Song");
+
+				break;
+			}
+
+			// Play (Complete)
+			case 9:
+			{
+				// Check to see if list is empty
+				if (pHead != NULL)
+				{
+					// Node to be played
+					Node* playing;
+
+					// Display all songs
+					printList(pHead);
+					// Get the song the user would like to start at
+					printf("What is the name of the artist you'd like to play?: ");
+					scanf(" %[^\n]s", strSelect);
+					playing = searchList(pHead, strSelect);
+
+					// "Play" the selected song and continue through the list in order
+					while (playing != NULL)
+					{
+						system("cls");
+						printNode(playing);
+						Sleep(5000);
+						playing->songData.timesPlayed++; // Increment times played counter
+						playing = playing->pNext;
+					}
+				}
+				else
+					puts("No Songs Loaded");
+
+				break;
 			}
 
 			// Exit
 			case 11:
 			{
+				// Save the list upon exit
+				if (pHead != NULL)
+				{
+					FILE* outFile = fopen("musicPlayList.csv", "w");
+
+					savePlayList(pHead, outFile);
+
+					fclose(outFile);
+				}
 				return 0;
 			}
 		}
 
+		// Pause on each loop
 		system("pause");
 	}
 }
