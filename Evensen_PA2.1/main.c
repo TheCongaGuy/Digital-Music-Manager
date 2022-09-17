@@ -34,7 +34,7 @@ int main(int argc, char argv[])
 
 		// Prompt the user for their input
 		puts("Welcome, please make a selection:\n");
-		puts("1)  load\n2)  store\n3)  display\n4)  insert (NOT AVAILABLE)\n5)  delete (NOT AVAILABLE\n6)  edit\n7)  sort (NOT AVAILABLE)\n8)  rate\n9)  play\n10) shuffle (NOT AVAILABLE)\n11) exit");
+		puts("1)  load\n2)  store\n3)  display\n4)  insert\n5)  delete\n6)  edit\n7)  sort (NOT AVAILABLE)\n8)  rate\n9)  play\n10) shuffle (NOT AVAILABLE)\n11) exit");
 		intInput(&intSelect);
 
 		// Preform the chosen action by the user
@@ -129,6 +129,61 @@ int main(int argc, char argv[])
 				}
 				else
 					puts("No Songs Loaded");
+
+				break;
+			}
+
+			// Insert Song (Complete)
+			case 4:
+			{
+				// New song to add to the list
+				Record newRecord = { "", "", "", "", {0, 0}, 0, 0 };
+
+				// Populate the record with data
+				printf("Name of Artist: ");
+				scanf(" %[^\n]s", strSelect);
+				strcpy(newRecord.artist, strSelect);
+
+				printf("\nName of Song: ");
+				scanf(" %[^\n]s", strSelect);
+				strcpy(newRecord.sonTitle, strSelect);
+
+				printf("\nName of Album: ");
+				scanf(" %[^\n]s", strSelect);
+				strcpy(newRecord.albTitle, strSelect);
+
+				printf("\nGenre of Song: ");
+				scanf(" %[^\n]s", strSelect);
+				strcpy(newRecord.genre, strSelect);
+
+				puts("Song Duration");
+				printf("Minutes: ");
+				intInput(&newRecord.length.minutes);
+
+				printf("Seconds: ");
+				intInput(&newRecord.length.seconds);
+
+				printf("Song Rating /5: ");
+				intInput(&intSelect);
+				// Clamp values between 1 and 5 inclusively
+				if (intSelect < 1)
+					intSelect = 1;
+				if (intSelect > 5)
+					intSelect = 5;
+				newRecord.rating = intSelect;
+
+				insertFront(&pHead, &newRecord);
+
+				break;
+			}
+
+			// Delete Song (Complete; Needs Refactor)
+			case 5:
+			{
+				printf("Name of Song: ");
+				scanf(" %[^\n]s", strSelect);
+
+				deleteNode(&pHead, strSelect);
 
 				break;
 			}
@@ -308,9 +363,9 @@ int main(int argc, char argv[])
 					// Display all songs
 					printList(pHead);
 					// Get the song the user would like to start at
-					printf("What is the name of the artist you'd like to play?: ");
+					printf("What song would you like to play?: ");
 					scanf(" %[^\n]s", strSelect);
-					playing = searchList(pHead, strSelect);
+					playing = searchListTitle(pHead, strSelect);
 
 					// "Play" the selected song and continue through the list in order
 					while (playing != NULL)

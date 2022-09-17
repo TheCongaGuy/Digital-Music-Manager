@@ -63,6 +63,11 @@ void printList(Node* sListEntry);
 // Takes a name to search for and a Node to start from; Neither can be NULL
 void printFilteredList(char* target, Node* sListEntry);
 
+// Inserts a song to the front of a doubly linked list of songs
+// Takes a Node list (pointer to a pointer to a node) and a pointer to a Record
+// Returns an int of success; 0 = failure, 1 = success
+int insertFront(Node** songList, Record* pSong);
+
 // Converts a string of data to a Record and adds it to the given list
 // Takes a pointer to the play list and a char pointer to a formatted string
 // Return an int of success; 0 = failure, 1 = success
@@ -77,5 +82,14 @@ int savePlayList(Node* playList, FILE* location);
 // Takes a pointer to a list and a search string; Neither the list nor the string may be NULL
 // Returns the address of a node in the heap
 Node* searchList(Node* playList, char* searchString);
+
+// Grab the address of a node from the heap based on song title
+// Takes a pointer to a list and a search string; Neither the list nor the string may be NULL; Assumes no duplicates
+// Returns the address of a node in the heap
+Node* searchListTitle(Node* playList, char* searchString);
+
+// Delete a specific node from the list
+// Takes a pointer to a pointer to a list, and a search string; Neither the list nor the string may be NULL
+void deleteNode(Node** playList, char* searchString);
 
 #endif // Guard Code end

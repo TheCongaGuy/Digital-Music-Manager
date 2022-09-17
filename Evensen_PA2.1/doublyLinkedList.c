@@ -242,3 +242,53 @@ Node* searchList(Node* playList, char* searchString)
 	// If a valid node was not found, return a NULL pointer
 	return NULL;
 }
+
+// Grab the address of a node from the heap based on song title
+// Takes a pointer to a list and a search string; Neither the list nor the string may be NULL; Assumes no duplicates
+// Returns the address of a node in the heap
+Node* searchListTitle(Node* playList, char* searchString)
+{
+	// Traversal pointer
+	Node* pCur = playList;
+
+	// Search through the list for matching nodes
+	while (pCur != NULL)
+	{
+		if (strcmp(searchString, pCur->songData.sonTitle) == 0)
+		{
+			return pCur;
+		}
+
+		// Traverse the list
+		pCur = pCur->pNext;
+	}
+
+	// If a valid node was not found, return a NULL pointer
+	return NULL;
+}
+
+// Delete a specific node from the list
+// Takes a pointer to a pointer to a list, and a search string; Neither the list nor the string may be NULL
+void deleteNode(Node** playList, char* searchString)
+{
+	// Grab the requested node
+	Node* target = searchListTitle(*playList, searchString);
+
+	// Remove the node if it exists
+	if (target != NULL)
+	{
+		Node* pPrev = target->pPrev, * pNext = target->pNext;
+
+		if (pPrev != NULL)
+			pPrev->pNext = pNext;
+		else
+			*playList = pNext;
+
+		if (pNext != NULL)
+			pNext->pPrev = pPrev;
+
+		free(target);
+	}
+	else
+		puts("No Song Exists");
+}
