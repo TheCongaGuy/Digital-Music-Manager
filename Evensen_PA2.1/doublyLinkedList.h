@@ -43,8 +43,8 @@ typedef struct record
 typedef struct node
 {
 	Record songData;
-	struct Node* pPrev;
-	struct Node* pNext;
+	struct node* pPrev;
+	struct node* pNext;
 } Node;
 
 // Takes input from the user and stores it into the given variable
@@ -91,5 +91,13 @@ Node* searchListTitle(Node* playList, char* searchString);
 // Delete a specific node from the list
 // Takes a pointer to a pointer to a list, and a search string; Neither the list nor the string may be NULL
 void deleteNode(Node** playList, char* searchString);
+
+// Sort a list lowest to highest ratings via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void rateInsertionSort(Node** playList);
+
+// Sort a list lowest to highest times played via insertion sort
+// Takes a pointer to a pointer to a list
+void tPlayedInsertionSort(Node** playList);
 
 #endif // Guard Code end

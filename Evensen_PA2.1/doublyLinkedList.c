@@ -277,18 +277,99 @@ void deleteNode(Node** playList, char* searchString)
 	// Remove the node if it exists
 	if (target != NULL)
 	{
-		Node* pPrev = target->pPrev, * pNext = target->pNext;
-
-		if (pPrev != NULL)
-			pPrev->pNext = pNext;
+		if (target->pPrev != NULL)
+			target->pPrev->pNext = target->pNext;
 		else
-			*playList = pNext;
+			*playList = target->pNext;
 
-		if (pNext != NULL)
-			pNext->pPrev = pPrev;
+		if (target->pNext != NULL)
+			target->pNext->pPrev = target->pPrev;
 
 		free(target);
 	}
 	else
 		puts("No Song Exists");
+}
+
+// Swap two neighboring nodes in a list
+// Takes two pointers to nodes; Need to point to eachother
+void nodeSwap(Node* destination, Node* target)
+{
+	// Reference
+	// destination.pPrev->destination->target->target.pNext
+	// destination.pPrev<-destination<-target<-target.pNext
+
+	// Set pNext pointers first (destination.pPrev -> target -> destination -> target.pNext)
+	if (destination->pPrev != NULL)
+		destination->pPrev->pNext = target;
+	destination->pNext = target->pNext;
+	target->pNext = destination;
+
+	// Reference
+	// destination.pPrev->target->destination->target.pNext
+	// destination.pPrev<-destination<-target<-target.pNext
+
+	// Set pPrev pointers by going backwards (target.pNext -> destination -> target -> destination.pPrev)
+	if (destination->pNext != NULL)
+		destination->pNext->pPrev = destination;
+	target->pPrev = destination->pPrev;
+	destination->pPrev = target;
+
+	// Final Product
+	// destination.pPrev->target->destination->target.pNext
+	// destination.pPrev<-target<-destination<-target.pNext
+}
+
+// Sort a list lowest to highest ratings via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void rateInsertionSort(Node** playList)
+{
+	// Traversal pointers
+	Node* pCur = *playList, * pPrev = NULL;
+
+	// Move through the entire list
+	while (pCur != NULL)
+	{
+		// Swap any values that are not in order; each swap goes backwards in the list
+		if (pCur->pPrev != NULL && pCur->songData.rating < pCur->pPrev->songData.rating)
+			nodeSwap(pCur->pPrev, pCur);
+		// Otherwise continue through the list
+		else
+		{
+			pPrev = pCur;
+			pCur = pCur->pNext;
+		}
+	}
+
+	// Fix the head pointer
+	while (pPrev->pPrev != NULL)
+		pPrev = pPrev->pPrev;
+	*playList = pPrev;
+}
+
+// Sort a list lowest to highest times played via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void tPlayedInsertionSort(Node** playList)
+{
+	// Traversal pointers
+	Node* pCur = *playList, * pPrev = NULL;
+
+	// Move through the entire list
+	while (pCur != NULL)
+	{
+		// Swap any values that are not in order; each swap goes backwards in the list
+		if (pCur->pPrev != NULL && pCur->songData.timesPlayed < pCur->pPrev->songData.timesPlayed)
+			nodeSwap(pCur->pPrev, pCur);
+		// Otherwise continue through the list
+		else
+		{
+			pPrev = pCur;
+			pCur = pCur->pNext;
+		}
+	}
+
+	// Fix the head pointer
+	while (pPrev->pPrev != NULL)
+		pPrev = pPrev->pPrev;
+	*playList = pPrev;
 }

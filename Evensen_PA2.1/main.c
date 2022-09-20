@@ -16,6 +16,9 @@
  // File Manager
  // Print List method
  // Search List method
+ // Delete Node method
+ // Sorting method
+ // Random Number generator
 
 int main(int argc, char argv[])
 {
@@ -34,7 +37,7 @@ int main(int argc, char argv[])
 
 		// Prompt the user for their input
 		puts("Welcome, please make a selection:\n");
-		puts("1)  load\n2)  store\n3)  display\n4)  insert\n5)  delete\n6)  edit\n7)  sort (NOT AVAILABLE)\n8)  rate\n9)  play\n10) shuffle (NOT AVAILABLE)\n11) exit");
+		puts("1)  load\n2)  store\n3)  display\n4)  insert\n5)  delete\n6)  edit\n7)  sort\n8)  rate\n9)  play\n10) shuffle (NOT AVAILABLE)\n11) exit");
 		intInput(&intSelect);
 
 		// Preform the chosen action by the user
@@ -177,9 +180,11 @@ int main(int argc, char argv[])
 				break;
 			}
 
-			// Delete Song (Complete; Needs Refactor)
+			// Delete Song (Complete)
 			case 5:
 			{
+				printList(pHead);
+
 				printf("Name of Song: ");
 				scanf(" %[^\n]s", strSelect);
 
@@ -310,6 +315,59 @@ int main(int argc, char argv[])
 				}// End of if()
 				else
 					puts("Could Not Find Song");
+
+				break;
+			}
+
+			// Sort
+			case 7:
+			{
+				// Prompt the user for a selection
+				puts("How would you like to sort the playlist?\n1) Artist (A-Z)\n2) Album (A-Z)\n3) Rating (1-5)\n4) Times Played (low-high)");
+				intInput(&intSelect);
+
+				// Sort via Insertion Sort
+				switch (intSelect)
+				{
+					// Sort by Artist
+					case 1:
+					{
+
+					}
+					// Sort by Album
+					case 2:
+					{
+
+					}
+					// Sort by Rating
+					case 3:
+					{
+						if (pHead != NULL)
+						{
+							puts("Sorting...");
+							rateInsertionSort(&pHead);
+							puts("Sorted");
+						}
+						else
+							puts("No Songs Loaded");
+
+						break;
+					}
+					// Sort by Times Played
+					case 4:
+					{
+						if (pHead != NULL)
+						{
+							puts("Sorting...");
+							tPlayedInsertionSort(&pHead);
+							puts("Sorted");
+						}
+						else
+							puts("No Songs Loaded");
+
+						break;
+					}
+				}
 
 				break;
 			}
