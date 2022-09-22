@@ -4,8 +4,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h> // puts(), printf(), fprintf(), fopen(), fclose(), fgets(), gets(), scanf()
-#include <stdlib.h> // atoi(), malloc()
+#include <stdlib.h> // atoi(), malloc(), srand(), rand()
 #include <string.h> // strcpy(), strcmp()
+#include <time.h> // time()
 #include <Windows.h> // Sleep()
 
 /*******************************************************************************
@@ -68,6 +69,11 @@ void printFilteredList(char* target, Node* sListEntry);
 // Returns an int of success; 0 = failure, 1 = success
 int insertFront(Node** songList, Record* pSong);
 
+// Gets the current size of a list
+// Takes a pointer to a pointer to a list
+// Returns the number of items in the list
+int lenList(Node* playList);
+
 // Converts a string of data to a Record and adds it to the given list
 // Takes a pointer to the play list and a char pointer to a formatted string
 // Return an int of success; 0 = failure, 1 = success
@@ -92,12 +98,24 @@ Node* searchListTitle(Node* playList, char* searchString);
 // Takes a pointer to a pointer to a list, and a search string; Neither the list nor the string may be NULL
 void deleteNode(Node** playList, char* searchString);
 
-// Sort a list lowest to highest ratings via insertion sort
+// Sort a list A-Z by artist via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void artistInsertionSort(Node** playList);
+
+// Sort a list A-Z by album title via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void albumInsertionSort(Node** playList);
+
+// Sort a list lowest to highest by ratings via insertion sort
 // Takes a pointer to a pointer to a list; cannot be NULL
 void rateInsertionSort(Node** playList);
 
-// Sort a list lowest to highest times played via insertion sort
+// Sort a list lowest to highest by times played via insertion sort
 // Takes a pointer to a pointer to a list
 void tPlayedInsertionSort(Node** playList);
+
+// Play the playlist in a random order
+// Takes a pointer to a list and the size of that list; neither may be NULL
+void shufflePlaylist(Node* playList, int length);
 
 #endif // Guard Code end

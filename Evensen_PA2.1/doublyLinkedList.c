@@ -320,6 +320,60 @@ void nodeSwap(Node* destination, Node* target)
 	// destination.pPrev<-target<-destination<-target.pNext
 }
 
+// Sort a list A-Z by artist via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void artistInsertionSort(Node** playList)
+{
+	// Traversal pointers
+	Node* pCur = *playList, * pPrev = NULL;
+
+	// Move through the entire list
+	while (pCur != NULL)
+	{
+		// Swap any values that are not in order; each swap goes backwards in the list
+		if (pCur->pPrev != NULL && strcmp(pCur->songData.artist, pCur->pPrev->songData.artist) < 0) //strcmp("A", "Z") -> 1; strcmp("Z", "A") -> -1; strcmp("A", "A") -> 0
+			nodeSwap(pCur->pPrev, pCur);
+		// Otherwise continue through the list
+		else
+		{
+			pPrev = pCur;
+			pCur = pCur->pNext;
+		}
+	}
+
+	// Fix the head pointer
+	while (pPrev->pPrev != NULL)
+		pPrev = pPrev->pPrev;
+	*playList = pPrev;
+}
+
+// Sort a list A-Z by album title via insertion sort
+// Takes a pointer to a pointer to a list; cannot be NULL
+void albumInsertionSort(Node** playList)
+{
+	// Traversal pointers
+	Node* pCur = *playList, * pPrev = NULL;
+
+	// Move through the entire list
+	while (pCur != NULL)
+	{
+		// Swap any values that are not in order; each swap goes backwards in the list
+		if (pCur->pPrev != NULL && strcmp(pCur->songData.albTitle, pCur->pPrev->songData.albTitle) < 0) //strcmp("A", "Z") -> 1; strcmp("Z", "A") -> -1; strcmp("A", "A") -> 0
+			nodeSwap(pCur->pPrev, pCur);
+		// Otherwise continue through the list
+		else
+		{
+			pPrev = pCur;
+			pCur = pCur->pNext;
+		}
+	}
+
+	// Fix the head pointer
+	while (pPrev->pPrev != NULL)
+		pPrev = pPrev->pPrev;
+	*playList = pPrev;
+}
+
 // Sort a list lowest to highest ratings via insertion sort
 // Takes a pointer to a pointer to a list; cannot be NULL
 void rateInsertionSort(Node** playList)
@@ -372,4 +426,76 @@ void tPlayedInsertionSort(Node** playList)
 	while (pPrev->pPrev != NULL)
 		pPrev = pPrev->pPrev;
 	*playList = pPrev;
+}
+
+// Gets the current size of a list
+// Takes a pointer to a pointer to a list
+// Returns the number of items in the list
+int lenList(Node* playList)
+{
+	int items = 0;
+
+	// Traversal pointer
+	Node* pCur = playList;
+
+	// Count the number of items in the list
+	while (pCur != NULL)
+	{
+		items++;
+		pCur = pCur->pNext;
+	}
+
+	return items;
+}
+
+// Play the playlist in a random order
+// Takes a pointer to a list and the size of that list; neither may be NULL
+void shufflePlaylist(Node* playList, int length)
+{
+	// Create a buffer list
+	Node* buffer = NULL;
+
+	// Traversal pointers
+	Node* pCurPlay = playList, * pPrevBuff = NULL;
+
+	// Initialize the random number generator
+	int rng;
+	srand(time(NULL));
+
+	// Select a random song from the playList to add to the buffer
+	for (int i = 0; i < length;)
+	{
+		rng = 1 + rand() % length;
+
+		// Grab the node in the playlist at the randomly selected index
+		for (int j = 1; j < rng; j++)
+			pCurPlay = pCurPlay->pNext;
+
+		// Check to see if the node was already taken
+		if (buffer == NULL)
+		{
+			insertFront(&buffer, &pCurPlay->songData);
+			i++;
+		}
+		else if (searchListTitle(buffer, pCurPlay->songData.sonTitle) == NULL)
+		{
+			insertFront(&buffer, &pCurPlay->songData);
+			i++;
+		}
+
+		// Reset traversal pointer
+		pCurPlay = playList;
+	}
+
+	// Play the newly randomised playList
+	while (buffer != NULL)
+	{
+		system("cls");
+		printNode(buffer);
+		Sleep(5000);
+		pPrevBuff = buffer;
+		buffer = buffer->pNext;
+		// Free the played node
+		free(pPrevBuff);
+	}
 }

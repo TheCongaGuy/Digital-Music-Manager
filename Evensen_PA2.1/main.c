@@ -319,7 +319,7 @@ int main(int argc, char argv[])
 				break;
 			}
 
-			// Sort
+			// Sort (Complete)
 			case 7:
 			{
 				// Prompt the user for a selection
@@ -332,12 +332,30 @@ int main(int argc, char argv[])
 					// Sort by Artist
 					case 1:
 					{
+						if (pHead != NULL)
+						{
+							puts("Sorting...");
+							artistInsertionSort(&pHead);
+							puts("Sorted");
+						}
+						else
+							puts("No Songs Loaded");
 
+						break;
 					}
 					// Sort by Album
 					case 2:
 					{
+						if (pHead != NULL)
+						{
+							puts("Sorting...");
+							albumInsertionSort(&pHead);
+							puts("Sorted");
+						}
+						else
+							puts("No Songs Loaded");
 
+						break;
 					}
 					// Sort by Rating
 					case 3:
@@ -437,6 +455,21 @@ int main(int argc, char argv[])
 				}
 				else
 					puts("No Songs Loaded");
+
+				break;
+			}
+
+			// Shufle
+			case 10:
+			{
+				// Check to see if list is mepty
+				if (pHead != NULL)
+				{
+					// Get the length of the list
+					int len = lenList(pHead);
+
+					shufflePlaylist(pHead, len);
+				}
 
 				break;
 			}
