@@ -36,8 +36,8 @@ typedef struct record
 
 	Duration length;
 
-	unsigned int timesPlayed;
-	unsigned int rating;
+	int timesPlayed;
+	int rating;
 } Record;
 
 // Represents a node of data in the doubly linked list
@@ -98,6 +98,10 @@ Node* searchListTitle(Node* playList, char* searchString);
 // Takes a pointer to a pointer to a list, and a search string; Neither the list nor the string may be NULL
 void deleteNode(Node** playList, char* searchString);
 
+// "Plays" songs through a playlist at a given entry point
+// Takes a pointer to a song
+void play(Node* song);
+
 // Sort a list A-Z by artist via insertion sort
 // Takes a pointer to a pointer to a list; cannot be NULL
 void artistInsertionSort(Node** playList);
@@ -116,6 +120,6 @@ void tPlayedInsertionSort(Node** playList);
 
 // Play the playlist in a random order
 // Takes a pointer to a list and the size of that list; neither may be NULL
-void shufflePlaylist(Node* playList, int length);
+int* shufflePlaylist(Node* playList, int length);
 
 #endif // Guard Code end

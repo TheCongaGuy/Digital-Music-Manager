@@ -1,4 +1,5 @@
-#include"doublyLinkedList.h"
+#include "doublyLinkedList.h"
+#include "testCase.h"
 
 /*******************************************************************************
  * Programmer: Drew Evensen		                                               *
@@ -29,7 +30,7 @@ int main(int argc, char argv[])
 	int intSelect = -1;
 	char strSelect[50] = "";
 
-	// While the user has not chosen to exit:
+	//While the user has not chosen to exit:
 	while (intSelect != 11)
 	{
 		// Clear the screen on successive loops
@@ -37,7 +38,7 @@ int main(int argc, char argv[])
 
 		// Prompt the user for their input
 		puts("Welcome, please make a selection:\n");
-		puts("1)  load\n2)  store\n3)  display\n4)  insert\n5)  delete\n6)  edit\n7)  sort\n8)  rate\n9)  play\n10) shuffle (NOT AVAILABLE)\n11) exit");
+		puts("1)  load\n2)  store\n3)  display\n4)  insert\n5)  delete\n6)  edit\n7)  sort\n8)  rate\n9)  play\n10) shuffle\n11) exit");
 		intInput(&intSelect);
 
 		// Preform the chosen action by the user
@@ -444,14 +445,7 @@ int main(int argc, char argv[])
 					playing = searchListTitle(pHead, strSelect);
 
 					// "Play" the selected song and continue through the list in order
-					while (playing != NULL)
-					{
-						system("cls");
-						printNode(playing);
-						Sleep(5000);
-						playing->songData.timesPlayed++; // Increment times played counter
-						playing = playing->pNext;
-					}
+					play(playing);
 				}
 				else
 					puts("No Songs Loaded");
@@ -465,9 +459,8 @@ int main(int argc, char argv[])
 				// Check to see if list is mepty
 				if (pHead != NULL)
 				{
-					// Get the length of the list
+					// Get the length of the list and shuffle the list
 					int len = lenList(pHead);
-
 					shufflePlaylist(pHead, len);
 				}
 

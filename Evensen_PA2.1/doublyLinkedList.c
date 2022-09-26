@@ -53,6 +53,15 @@ int insertFront(Node** songList, Record* pSong)
 	// Track success of insertion
 	int success = 0;
 
+	// Clean the node of invalid data
+	if (pSong->rating < 1)
+		pSong->rating = 1;
+	if (pSong->rating > 5)
+		pSong->rating = 5;
+
+	if (pSong->timesPlayed < 0)
+		pSong->timesPlayed = 0;
+
 	// Pointer to new node in the heap
 	Node* pMem = makeNode(pSong);
 	// pPrev setter
@@ -291,6 +300,21 @@ void deleteNode(Node** playList, char* searchString)
 		puts("No Song Exists");
 }
 
+// "Plays" songs through a playlist at a given entry point
+// Takes a pointer to a song
+void play(Node* song)
+{
+	// "Play" the selected song and continue through the list in order
+	while (song != NULL)
+	{
+		system("cls");
+		printNode(song);
+		Sleep(5000);
+		song->songData.timesPlayed++; // Increment times played counter
+		song = song->pNext;
+	}
+}
+
 // Swap two neighboring nodes in a list
 // Takes two pointers to nodes; Need to point to eachother
 void nodeSwap(Node* destination, Node* target)
@@ -450,8 +474,12 @@ int lenList(Node* playList)
 
 // Play the playlist in a random order
 // Takes a pointer to a list and the size of that list; neither may be NULL
-void shufflePlaylist(Node* playList, int length)
+// Returns the array of random numbers generated
+int* shufflePlaylist(Node* playList, int length)
 {
+	// Index array
+	static int indexArray[100];
+
 	// Create a buffer list
 	Node* buffer = NULL;
 
@@ -475,11 +503,13 @@ void shufflePlaylist(Node* playList, int length)
 		if (buffer == NULL)
 		{
 			insertFront(&buffer, &pCurPlay->songData);
+			indexArray[i] = rng;
 			i++;
 		}
 		else if (searchListTitle(buffer, pCurPlay->songData.sonTitle) == NULL)
 		{
 			insertFront(&buffer, &pCurPlay->songData);
+			indexArray[i] = rng;
 			i++;
 		}
 
@@ -488,14 +518,16 @@ void shufflePlaylist(Node* playList, int length)
 	}
 
 	// Play the newly randomised playList
+	play(buffer);
+
+	// Delete the buffer array
 	while (buffer != NULL)
 	{
-		system("cls");
-		printNode(buffer);
-		Sleep(5000);
 		pPrevBuff = buffer;
 		buffer = buffer->pNext;
-		// Free the played node
+
 		free(pPrevBuff);
 	}
+
+	return indexArray;
 }
