@@ -130,9 +130,11 @@
   <ItemGroup>
     <ClCompile Include="doublyLinkedList.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="testCase.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="doublyLinkedList.h" />
+    <ClInclude Include="testCase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="musicPlayList.csv" />
